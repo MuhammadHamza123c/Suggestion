@@ -1,2 +1,3 @@
-streamlit
+flask
 firebase-admin
+gunicorn
