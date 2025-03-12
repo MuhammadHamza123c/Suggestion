@@ -5,7 +5,7 @@ import json
 import os
 
 # Load Firebase credentials from Streamlit Secrets
-firebase_secrets = st.secrets[firebase]
+firebase_secrets = st.secrets['firebase']
 cred = credentials.Certificate(firebase_secrets)
 
 # Initialize Firebase app only once
