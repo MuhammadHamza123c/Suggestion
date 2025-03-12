@@ -2,18 +2,32 @@ import firebase_admin
 import streamlit as st
 from firebase_admin import credentials, db
 import json
-import os
 
 # Load Firebase credentials from Streamlit Secrets
-firebase_secrets = st.secrets['firebase']
-cred = credentials.Certificate(firebase_secrets)
+firebase_secrets = st.secrets["firebase"]
+
+# Convert private_key to a properly formatted string
+firebase_secrets_dict = {
+    "type": firebase_secrets["type"],
+    "project_id": firebase_secrets["project_id"],
+    "private_key_id": firebase_secrets["private_key_id"],
+    "private_key": firebase_secrets["private_key"].replace('\\n', '\n'),  # Fix newline issue
+    "client_email": firebase_secrets["client_email"],
+    "client_id": firebase_secrets["client_id"],
+    "auth_uri": firebase_secrets["auth_uri"],
+    "token_uri": firebase_secrets["token_uri"],
+    "auth_provider_x509_cert_url": firebase_secrets["auth_provider_x509_cert_url"],
+    "client_x509_cert_url": firebase_secrets["client_x509_cert_url"]
+}
 
 # Initialize Firebase app only once
 if not firebase_admin._apps:
+    cred = credentials.Certificate(firebase_secrets_dict)
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://suggestion-d9014-default-rtdb.asia-southeast1.firebasedatabase.app/'
     })
 
+# Reference to Firebase Database
 suggestion = db.reference('/Suggestion')
 
 # Streamlit UI
